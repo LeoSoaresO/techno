@@ -28,17 +28,6 @@ body, h1, h2, ul, li,p {
      }
   }
 
-  @keyframes fadeOut {
-    from {
-        opacity: 1;
-        transform: translate3d(0px, 0, 0);
-    }
-     to {
-        opacity: 0;
-        transform: translate3d(500px, 0, 0);
-     }
-  }
-
   .products{
     max-width: 900px;
     cursor: pointer;
@@ -92,7 +81,7 @@ body, h1, h2, ul, li,p {
         grid-gap: 50px;
         padding: 0px 50px 50px 0px;
         animation: fadeIn 0.9s forwards;
-        
+
         .m_img{
             grid-column: 1;
             margin-top: 50px;
