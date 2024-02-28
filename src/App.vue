@@ -8,12 +8,12 @@ export default {
     components: {HeaderComponent},
 
     data() {
-        const data:any[] = [];
+        const productData:any[] = [];
         const cart:any[] = [];
         const product:any = {};
         const alertActive: boolean = false;
         const alertText: string = '';
-        return {data, product, cart, alertActive, alertText}
+        return {productData, product, cart, alertActive, alertText}
     },
 
     methods: {
@@ -21,8 +21,7 @@ export default {
             fetch("/src/api/produtos.json")
                 .then(r => r.json())
                 .then(r => {
-                this.data = r
-                console.log(this.data);
+                this.productData = r
             })
         },
 
@@ -44,6 +43,9 @@ export default {
 
         closeModal(event:Event){
             if(event.target === event.currentTarget) this.product = false;
+            document.title = "techno";
+            history.pushState(null, null, `#`)
+
         },
 
         price(value:any){
@@ -62,16 +64,27 @@ export default {
         },
         
         handleAlert(msg:string){
-            console.log(this.alertActive);
             this.alertText = msg;
             this.alertActive = true
             setTimeout(() => {
             this.alertActive = false
             }, 2000);
-        }   
+        }, 
+        settings(d:any){
+            console.log('oi');
+            
+            document.title = `${d.nome} | ${this.price(d.preco)}`;
+            let url = d.id;
+            history.pushState(null,null, `#${url}`)
+        },
+        router(){
+            const hash = document.location.hash;
+            if(hash) this.getProductById(hash.replace("#", ""))
+        }
     },
     created() {
         this.getAllProducts();
+        this.router();
     }
 }
 
@@ -82,7 +95,7 @@ export default {
     <HeaderComponent :cart="cart" @item-removido="handleItemRemovido"></HeaderComponent>
 
     <section class="products">
-        <div v-for="d in data" @click="openModal(d.id)" class="product" :key="d.id">
+        <div v-for="d in productData" @click="openModal(d.id); settings(d)" class="product" :key="d.id">
             <img :src="d.img" :alt="d.nome" class="product_img">
             <div class="p_info">
                 <span class="p_price">{{ price(d.preco) }}</span>
