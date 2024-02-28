@@ -137,6 +137,11 @@ body, h1, h2, ul, li,p {
                     background: #808080;
                 }
             }
+            .out_stock{
+                @extend .m_btn;
+                background: #808080;
+                cursor: help;
+            }
         }
         .rating{
             grid-column: 2;
