@@ -24,23 +24,33 @@ export default {
             return total;
         }
     },
-    methods: {
-        getCart(){
-            this.cartControl = this.cart
+    watch: {
+        cart: {
+        handler: function() {
+            window.localStorage.cart = JSON.stringify(this.cart)
+            this.cartControl = JSON.parse(window.localStorage.cart)
         },
+        deep: true
+        }
+    },
+    methods: {
         removeItem(index:any, id:any) {
-            console.log(index);
-            console.log(this.cartControl);
             this.cartControl.splice(index, 1)
-            // this.cartControl.splice(index, 1)
+            this.$emit('item-removido', this.cartControl);
         },
         price(value:any){
         return value.toLocaleString("pt-BR", {style: "currency", currency: "BRL"})
         },
+        checkLocalstorage(){
+            if(window.localStorage.cart.length > 0){
+                this.cartControl = JSON.parse(window.localStorage.cart)
+            }
+        }
     },
     created() {
-        this.getCart()
-    }
+        this.cartControl = this.cart;
+        this.checkLocalstorage()
+    },
 }
 
 </script>

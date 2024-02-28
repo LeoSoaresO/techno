@@ -53,6 +53,9 @@ export default {
             const{ id, nome, preco} = this.product
             this.cart.push({ id, nome, preco})
         },
+        handleItemRemovido(data:any) {
+            this.cart = data
+        }
     },
     created() {
         this.getAllProducts();
@@ -63,7 +66,7 @@ export default {
 
 <template>
 
-    <HeaderComponent :cart="cart"></HeaderComponent>
+    <HeaderComponent :cart="cart" @item-removido="handleItemRemovido"></HeaderComponent>
 
   <section class="products">
     <div v-for="d in data" @click="openModal(d.id)" class="product" :key="d.id">
