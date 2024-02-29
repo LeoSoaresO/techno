@@ -74,7 +74,9 @@ export default {
                 <li class="cart_item" v-for="(i, index) in cartControl" :key="i.id">
                     <p class="cart_item_name">{{ i.nome }}</p>
                     <p class="cart_item_price">{{ price(i.preco) }}</p>
-                    <button class="cart_item_remove" @click="removeItem(index, i.id)">X</button>
+                    <button class="cart_item_remove" @click="removeItem(index, i.id)">
+                        <img src="/src/assets/trash.svg" alt="" srcset="">
+                    </button>
                 </li>
             </ul>
             <p class="cart_total">{{ price(cartTotal) }}</p>

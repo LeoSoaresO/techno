@@ -130,7 +130,7 @@ export default {
     </section>
 
     <div class="alert" :class="{active: alertActive}">
-        <p class="alert_text">{{alertText}}</p>
+        {{alertText}}
     </div>
 
 </template>
