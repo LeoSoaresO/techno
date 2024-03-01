@@ -1,55 +1,31 @@
-# Fluxo de trabalho simples para implementar
-# conteúdo estático na GitHub Pages
-name: Deploy static content to Pages
-
-on:
-  # Executa sobre as atualizações mirando o ramo padrão
+name: deployon:
   push:
-    branches: ['main']
-
-  # Permite-nos executar este fluxo de trabalho manualmente
-  # a partir da aba de Ações (ou `Actions`)
-  workflow_dispatch:
-
-# Define as permissões do GITHUB_TOKEN para permitir
-# a implementação na GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Permitir uma implementação simultânea
-concurrency:
-  group: 'pages'
-  cancel-in-progress: true
-
-jobs:
-  # Único trabalho de implementação
-  # uma vez que apenas estamos implementando
+    branches:
+      - main
+  jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Node
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: 18
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm install
-      - name: Build
-        run: npm run build-only
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          # Carregar o repositório de distribuição
-          path: './dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+          node-version: '12'
+      - name: setup git auth
+        env:
+          email: '<leonardo.rock22@hotmail.com>'
+          username: '<LeoSoaresO>'
+          access_token: '<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>'
+        run: |
+          git config --global credential.helper store
+          echo "https://${access_token}:x-oauth-basic@github.com" > ~/.git-credentials
+          git config --global user.email $email
+          git config --global user.name $username
+      - name: deploy to gh-pages
+        run: |
+          npm i
+          NODE_ENV=production npm run build-only
+          cd dist
+          git init
+          git add -A
+          git commit -m "🚀 Deploy id ${GITHUB_RUN_ID}"
+          git push -f "https://github.com/${GITHUB_REPOSITORY}.git" master:gh-pages
