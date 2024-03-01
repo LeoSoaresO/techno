@@ -3,26 +3,28 @@ on:
   push:
     branches:
       - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: '12'
-      - name: setup git auth
-        env:
-          email: '<leonardo.rock22@hotmail.com>'
-          username: '<LeoSoaresO>'
-          access_token: '<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>'
-        run:
-          git config --global credential.helper store
-          echo "https://${access_token}:x-oauth-basic@github.com" > ~/.git-credentials
-          git config --global user.email $email
-          git config --global user.name $username
+      - name: Install dependencies and build
+        run: |
           npm install
           npm run build-only
+      - name: Deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "leonardo.rock22@hotmail.com"
+          git config --global user.name "Leonardo Soares"
+          cd dist
+          git init
           git add .
-          git commit -m "🚀 Deploy id ${GITHUB_RUN_ID}"
-          git push -f "https://github.com/${GITHUB_REPOSITORY}.git"
+          git commit -m "Deploy"
+          git push --force "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git" master:gh-pages
