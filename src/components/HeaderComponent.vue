@@ -43,8 +43,10 @@ export default {
         return value.toLocaleString("pt-BR", {style: "currency", currency: "BRL"})
         },
         checkLocalstorage(){
-            if(window.localStorage.cart.length > 0){
+            if(window.localStorage.cart){
                 this.cartControl = JSON.parse(window.localStorage.cart)
+            } else if (!window.localStorage.cart) {
+                this.cartControl = this.cart;
             }
         },
         closeModal(event:Event){
@@ -74,7 +76,7 @@ export default {
                 <li class="cart_item" v-for="(i, index) in cartControl" :key="i.id">
                     <p class="cart_item_name">{{ i.nome }}</p>
                     <p class="cart_item_price">{{ price(i.preco) }}</p>
-                    <button class="cart_item_remove" @click="removeItem(index, i.id)">
+                    <button class="cart_item_remove" @click="removeItem(index)">
                         <img src="/src/assets/trash.svg" alt="" srcset="">
                     </button>
                 </li>

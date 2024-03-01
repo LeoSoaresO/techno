@@ -4,29 +4,32 @@ import './style.scss';
 import HeaderComponent from './components/HeaderComponent.vue'
 
 export default {
-
     components: {HeaderComponent},
 
     data() {
+        const API = {
+            URL: "https://leosoareso.github.io/apis/techno/api/produtos"
+        } 
         const productData:any[] = [];
         const cart:any[] = [];
         const product:any = {};
         const alertActive: boolean = false;
         const alertText: string = '';
-        return {productData, product, cart, alertActive, alertText}
+        return {productData, product, cart, alertActive, alertText, API}
     },
 
     methods: {
         getAllProducts() {     
-            fetch("/src/api/produtos.json")
+            fetch(`${this.API.URL}.json`)
                 .then(r => r.json())
                 .then(r => {
                 this.productData = r
+                console.log(this.productData)
             })
         },
 
         getProductById(id:any) {     
-            fetch(`/src/api/produtos/${id}/dados.json`)
+            fetch(`${this.API.URL}/${id}/dados.json`)
                 .then(r => r.json())
                 .then(r => {
                 this.product = r
