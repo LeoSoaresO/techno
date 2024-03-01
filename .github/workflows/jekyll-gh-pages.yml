@@ -16,17 +16,13 @@ jobs:
           email: '<leonardo.rock22@hotmail.com>'
           username: '<LeoSoaresO>'
           access_token: '<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>'
-        run: |
+        run:
           git config --global credential.helper store
           echo "https://${access_token}:x-oauth-basic@github.com" > ~/.git-credentials
           git config --global user.email $email
           git config --global user.name $username
-      - name: deploy to gh-pages
-        run: |
-          npm i
-          NODE_ENV=production npm run build
-          cd dist
-          git init
-          git add -A
+          npm install
+          npm run build-only
+          git add .
           git commit -m "🚀 Deploy id ${GITHUB_RUN_ID}"
-          git push -f "https://github.com/${GITHUB_REPOSITORY}.git" master:gh-pages
+          git push -f "https://github.com/${GITHUB_REPOSITORY}.git"
